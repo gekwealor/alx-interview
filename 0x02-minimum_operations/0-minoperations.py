@@ -1,36 +1,41 @@
 #!/usr/bin/python3
-"""
-In a text file, there is a single character H.
-Your text editor can execute only two operations in this file:
-Copy All and Paste.
-Given a number n, write a method that calculates the fewest
-number of operations needed
-to result in exactly n H characters in the file.
-
-    Prototype: def minOperations(n)
-    Returns an integer
-    If n is impossible to achieve, return 0
-"""
+'''
+Calculated minimum number of operations required
+'''
 
 
-def minOperations(n: int) -> int:
-    """
-    Calculates the fewest number of operations needed
-    to result in exactly n H characters in the file.
+def minOperations(n):
+    '''
+    Calculates the fewest number of operations required to achieve n
+    H characters
 
-    Return:
-        The minimum number of operations possible
-    """
-    operations: int = 0
-    divisor: int = 2
+    Args:
+        n: Number of H characters
 
-    if n <= 1:
+    Return: Fewest number of operations
+    '''
+    if not isinstance(n, int):
         return 0
-    while n > 1:
-        if n % divisor == 0:
-            operations += divisor
-            n /= divisor
-        else:
-            divisor += 1
+    operations = 0  # Tracks number of operations
+    clipboard = 0   # Stores current number of characters
+    characters = 1  # Initial character H
+
+    while characters < n:
+        if clipboard == 0:
+            # first copy_all and paste
+            clipboard = characters
+            characters += clipboard
+            operations += 2
+
+        elif n - characters > 0 and (n - characters) % characters == 0:
+            # copy all and paste
+            clipboard = characters
+            characters += clipboard
+            operations += 2
+
+        elif clipboard > 0:
+            # paste
+            characters += clipboard
+            operations += 1
 
     return operations
