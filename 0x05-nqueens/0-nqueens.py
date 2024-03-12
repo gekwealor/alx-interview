@@ -1,91 +1,59 @@
 #!/usr/bin/python3
+"""N Queens Challenge"""
+
 
 import sys
 
-def solve(row, column):
-    '''
-    Solves the N-Queens problem recursively.
 
-    Args:
-        row: The current row being considered.
-        column: The total number of columns (and queens).
+def generate_solutions(row, column):
+    solution = [[]]
+    for queen in range(row):
+        solution = place_queen(queen, column, solution)
+    return solution
 
-    Returns:
-        A list of solutions for placing queens on the chessboard.
-    '''
-    solver = [[]]
-    for q in range(row):
-        solver = place_queen(q, column, solver)
-    return solver
 
-def place_queen(q, column, prev_solver):
-    '''
-    Places a queen in a safe position on the chessboard.
-
-    Args:
-        q: The current row being considered.
-        column: The total number of columns (and queens).
-        prev_solver: The list of previous solutions.
-
-    Returns:
-        A list of solutions after placing a queen in a safe position.
-    '''
-    solver_queen = []
-    for array in prev_solver:
+def place_queen(queen, column, prev_solution):
+    safe_position = []
+    for array in prev_solution:
         for x in range(column):
-            if is_safe(q, x, array):
-                solver_queen.append(array + [x])
-    return solver_queen
+            if is_safe(queen, x, array):
+                safe_position.append(array + [x])
+    return safe_position
+
 
 def is_safe(q, x, array):
-    '''
-    Checks if it's safe to place a queen at a certain position.
-
-    Args:
-        q: The row being considered.
-        x: The column being considered.
-        array: The array representing the current board configuration.
-
-    Returns:
-        True if it's safe to place a queen, False otherwise.
-    '''
     if x in array:
-        return False
+        return (False)
     else:
         return all(abs(array[column] - x) != q - column
                    for column in range(q))
 
-def init():
-    '''
-    Initializes the N-Queens problem by obtaining and validating input.
 
-    Returns:
-        The number of queens (chessboard size).
-    '''
+def init():
     if len(sys.argv) != 2:
         print("Usage: nqueens N")
         sys.exit(1)
     if sys.argv[1].isdigit():
-        the_queen = int(sys.argv[1])
+        n = int(sys.argv[1])
     else:
         print("N must be a number")
         sys.exit(1)
-    if the_queen < 4:
+    if n < 4:
         print("N must be at least 4")
         sys.exit(1)
-    return the_queen
+    return (n)
+
 
 def n_queens():
-    '''
-    Main function to solve and print N-Queens solutions.
-    '''
-    the_queen = init()
-    solver = solve(the_queen, the_queen)
-    for array in solver:
+
+    n = init()
+    solutions = generate_solutions(n, n)
+    for array in solutions:
         clean = []
         for q, x in enumerate(array):
             clean.append([q, x])
         print(clean)
+
 
 if __name__ == '__main__':
     n_queens()
